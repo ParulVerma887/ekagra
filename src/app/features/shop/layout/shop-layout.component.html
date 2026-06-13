@@ -1,0 +1,39 @@
+<div class="shop-shell">
+
+  <header class="topbar">
+    <a routerLink="/shop/catalogue" class="brand">
+      <span class="brand-icon">⚡</span>
+      <span class="brand-name">Platform Commons</span>
+    </a>
+
+    <nav class="nav-links">
+      <a routerLink="/shop/catalogue" routerLinkActive="active">Shop</a>
+      <a routerLink="/shop/cart" routerLinkActive="active" class="cart-link">
+        <i class="pi pi-shopping-cart"></i>
+        Cart
+        @if (cartCount() > 0) {
+          <span class="cart-badge">{{ cartCount() }}</span>
+        }
+      </a>
+    </nav>
+
+    <div class="user-area">
+      <span class="user-name">{{ user()?.firstName }}</span>
+      <button class="logout-btn" (click)="logout()" title="Logout">
+        <i class="pi pi-sign-out"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    @defer (on idle) {
+      <router-outlet />
+    } @placeholder {
+      <div class="shop-placeholder">
+        <div class="placeholder-spinner"></div>
+        <p>Loading storefront...</p>
+      </div>
+    }
+  </main>
+
+</div>

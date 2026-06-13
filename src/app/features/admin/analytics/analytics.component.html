@@ -1,0 +1,57 @@
+<div class="page">
+  <div class="page-header">
+    <h2>Analytics</h2>
+    <span class="subtitle">DummyJSON data overview</span>
+  </div>
+
+  @if (loading) {
+    <div class="loading-wrap">
+      <i class="pi pi-spin pi-spinner"></i> Loading...
+    </div>
+  } @else {
+    <div class="stats-grid">
+      <div class="stat-card">
+        <i class="pi pi-shopping-cart"></i>
+        <div>
+          <p class="stat-label">Total Orders</p>
+          <p class="stat-value">{{ stats.totalOrders }}</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="pi pi-dollar"></i>
+        <div>
+          <p class="stat-label">Total Revenue</p>
+          <p class="stat-value">${{ stats.totalRevenue | number:'1.0-0' }}</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="pi pi-box"></i>
+        <div>
+          <p class="stat-label">Total Products</p>
+          <p class="stat-value">{{ stats.totalProducts }}</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="pi pi-users"></i>
+        <div>
+          <p class="stat-label">Total Users</p>
+          <p class="stat-value">{{ stats.totalUsers }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="top-products">
+      <h3>Top Selling Products</h3>
+      <div class="product-list">
+        @for (p of topProducts; track p.id) {
+          <div class="product-row">
+            <img [src]="p.thumbnail" [alt]="p.title" />
+            <span class="product-name">{{ p.title }}</span>
+            <span class="sold-qty">{{ p.soldQty }} sold</span>
+            <span class="product-price">${{ p.price }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

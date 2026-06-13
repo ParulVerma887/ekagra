@@ -1,0 +1,132 @@
+<div class="detail-page">
+
+  <a routerLink="/shop/catalogue" class="back-link">
+    <i class="pi pi-arrow-left"></i> Back to Shop
+  </a>
+
+  <div class="detail-grid">
+
+    <!-- Images -->
+    <div class="images-col">
+      <div class="main-img-wrap">
+        <img [src]="selectedImage()" [alt]="product.title" class="main-img" />
+      </div>
+      @if (product.images && product.images.length > 1) {
+        <div class="thumb-row">
+          @for (img of product.images; track img) {
+            <button
+              class="thumb-btn"
+              [class.active]="selectedImage() === img"
+              (click)="selectImage(img)"
+            >
+              <img [src]="img" [alt]="product.title" />
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Info -->
+    <div class="info-col">
+      <p class="breadcrumb">
+        <a routerLink="/shop/catalogue">Shop</a>
+        <span>/</span>
+        <span>{{ product.category }}</span>
+      </p>
+
+      <h1 class="product-title">{{ product.title }}</h1>
+
+      @if (product.brand) {
+        <p class="brand">by {{ product.brand }}</p>
+      }
+
+      <div class="meta-row">
+        <div class="rating">
+          @for (s of [1,2,3,4,5]; track s) {
+            <i class="pi" [class.pi-star-fill]="s <= product.rating" [class.pi-star]="s > product.rating"></i>
+          }
+          <span class="rating-num">{{ product.rating | number:'1.1-1' }}</span>
+        </div>
+        <span class="stock-badge" [class]="stockClass(product.stock)">
+          {{ stockLabel(product.stock) }}
+        </span>
+      </div>
+
+      <div class="price-row">
+        <span class="price">${{ product.price | number:'1.2-2' }}</span>
+        @if (product.discountPercentage > 5) {
+          <span class="discount-tag">{{ product.discountPercentage | number:'1.0-0' }}% OFF</span>
+        }
+      </div>
+
+      <p class="description">{{ product.description }}</p>
+
+      @if (product.stock > 0) {
+        <div class="qty-row">
+          <span class="qty-label">Quantity</span>
+          <div class="qty-control">
+            <button (click)="changeQty(-1)" [disabled]="quantity() <= 1">−</button>
+            <span>{{ quantity() }}</span>
+            <button (click)="changeQty(1)" [disabled]="quantity() >= product.stock">+</button>
+          </div>
+        </div>
+      }
+
+      <button
+        class="add-to-cart-btn"
+        [disabled]="product.stock === 0"
+        [class.added]="added()"
+        (click)="addToCart()"
+      >
+        @if (added()) {
+          <i class="pi pi-check"></i> Added to Cart!
+        } @else {
+          <i class="pi pi-cart-plus"></i>
+          {{ product.stock === 0 ? 'Out of Stock' : 'Add to Cart' }}
+        }
+      </button>
+
+      @if (product.stock === 0) {
+        <button class="notify-btn" disabled>
+          <i class="pi pi-bell"></i> Notify me when available
+        </button>
+      }
+
+      <a routerLink="/shop/cart" class="view-cart-link">View Cart →</a>
+
+      <div class="detail-tags">
+        @if (product.sku) {
+          <div class="tag-row"><span>SKU</span><span>{{ product.sku }}</span></div>
+        }
+        @if (product.warrantyInformation) {
+          <div class="tag-row"><span>Warranty</span><span>{{ product.warrantyInformation }}</span></div>
+        }
+        @if (product.shippingInformation) {
+          <div class="tag-row"><span>Shipping</span><span>{{ product.shippingInformation }}</span></div>
+        }
+        @if (product.returnPolicy) {
+          <div class="tag-row"><span>Returns</span><span>{{ product.returnPolicy }}</span></div>
+        }
+      </div>
+
+    </div>
+  </div>
+
+  @if (related().length > 0) {
+    <div class="related-section">
+      <h2>Related Products</h2>
+      <div class="related-grid">
+        @for (p of related(); track p.id) {
+          <a [routerLink]="['/shop/products', p.id]" class="related-card">
+            <img [src]="p.thumbnail" [alt]="p.title" />
+            <div class="related-info">
+              <p class="related-title">{{ p.title }}</p>
+              <p class="related-price">${{ p.price | number:'1.2-2' }}</p>
+            </div>
+          </a>
+        }
+      </div>
+    </div>
+  }
+
+</div>

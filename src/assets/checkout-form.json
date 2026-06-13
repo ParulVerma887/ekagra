@@ -1,0 +1,30 @@
+[
+  {
+    "name": "cardName",
+    "label": "Name on Card",
+    "type": "text",
+    "placeholder": "John Smith",
+    "validators": ["required", "minlength:3"]
+  },
+  {
+    "name": "cardNumber",
+    "label": "Card Number",
+    "type": "text",
+    "placeholder": "1234 5678 9012 3456",
+    "validators": ["required", "luhn"]
+  },
+  {
+    "name": "expiry",
+    "label": "Expiry (MM/YY)",
+    "type": "text",
+    "placeholder": "MM/YY",
+    "validators": ["required", "pattern:^(0[1-9]|1[0-2])\\/([0-9]{2})$"]
+  },
+  {
+    "name": "cvv",
+    "label": "CVV",
+    "type": "text",
+    "placeholder": "123",
+    "validators": ["required", "pattern:^[0-9]{3,4}$"]
+  }
+]

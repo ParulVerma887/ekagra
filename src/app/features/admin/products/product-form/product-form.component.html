@@ -1,0 +1,100 @@
+<p-dialog
+  [header]="isEdit ? 'Edit Product' : 'Add Product'"
+  [visible]="visible()"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '520px' }"
+  (onHide)="close()"
+>
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+
+    <div class="field">
+      <label>Title *</label>
+      <input pInputText formControlName="title" placeholder="Product title" class="w-full" />
+      @if (titleCtrl.touched && titleCtrl.invalid) {
+        <small class="err">Title is required (min 3 chars)</small>
+      }
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Price *</label>
+        <p-inputNumber
+          formControlName="price"
+          mode="currency"
+          currency="USD"
+          [minFractionDigits]="2"
+          placeholder="0.00"
+          styleClass="w-full"
+        />
+        @if (priceCtrl.touched && priceCtrl.invalid) {
+          <small class="err">Valid price required</small>
+        }
+      </div>
+
+      <div class="field">
+        <label>Stock *</label>
+        <p-inputNumber
+          formControlName="stock"
+          [min]="0"
+          placeholder="0"
+          styleClass="w-full"
+        />
+        @if (stockCtrl.touched && stockCtrl.invalid) {
+          <small class="err">Stock required</small>
+        }
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Category *</label>
+      <p-dropdown
+        formControlName="category"
+        [options]="categories()"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Select category"
+        styleClass="w-full"
+      />
+      @if (categoryCtrl.touched && categoryCtrl.invalid) {
+        <small class="err">Category required</small>
+      }
+    </div>
+
+    <div class="field">
+      <label>Brand</label>
+      <input pInputText formControlName="brand" placeholder="Brand name" class="w-full" />
+    </div>
+
+    <div class="field">
+      <label>Description *</label>
+      <textarea
+        pInputTextarea
+        formControlName="description"
+        rows="3"
+        placeholder="Product description"
+        class="w-full"
+      ></textarea>
+      @if (descriptionCtrl.touched && descriptionCtrl.invalid) {
+        <small class="err">Description required</small>
+      }
+    </div>
+
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Cancel"
+      severity="secondary"
+      [outlined]="true"
+      (onClick)="close()"
+    />
+    <p-button
+      [label]="isEdit ? 'Update' : 'Add Product'"
+      severity="primary"
+      [loading]="saving()"
+      (onClick)="submit()"
+    />
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,152 @@
+<div class="page">
+
+  <p-toast />
+  <p-confirmDialog />
+
+  <!-- Add/Edit Modal -->
+  <app-product-form
+    [visible]="formVisible()"
+    [product]="selectedProduct()"
+    [categories]="categoryOptions()"
+    (closed)="formVisible.set(false)"
+    (saved)="onFormSaved()"
+  />
+
+  <div class="page-header">
+    <h2>Products</h2>
+    <p-button
+      label="Add Product"
+      icon="pi pi-plus"
+      severity="primary"
+      (onClick)="openAdd()"
+      styleClass="add-btn"
+    />
+  </div>
+
+  <div class="table-card">
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <p-button
+        label="Clear Filters"
+        icon="pi pi-filter-slash"
+        severity="secondary"
+        [outlined]="true"
+        size="small"
+        (onClick)="clearFilters()"
+        styleClass="clear-btn"
+      />
+      <div class="toolbar-right">
+        <p-dropdown
+          [formControl]="categoryCtrl"
+          [options]="categoryOptions()"
+          optionLabel="label"
+          placeholder="All Categories"
+          [showClear]="true"
+          styleClass="cat-dropdown"
+        />
+        <div class="search-wrap">
+          <i class="pi pi-search search-icon"></i>
+          <input
+            pInputText
+            [formControl]="searchCtrl"
+            placeholder="Search products..."
+            class="search-input"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- PrimeNG Table -->
+    <p-table
+      [value]="products()"
+      [loading]="loading()"
+      [rows]="rowsPerPage()"
+      [totalRecords]="total()"
+      [paginator]="true"
+      [lazy]="true"
+      (onLazyLoad)="onLazyLoad($any($event))"
+      [rowsPerPageOptions]="rowsOptions"
+      [rowHover]="true"
+      [scrollable]="true"
+      styleClass="p-datatable-gridlines p-datatable-sm"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width:70px">Image</th>
+          <th pSortableColumn="title">
+            <div class="col-header">Name <p-sortIcon field="title" /><p-columnFilter type="text" field="title" display="menu" /></div>
+          </th>
+          <th pSortableColumn="category">
+            <div class="col-header">Category <p-sortIcon field="category" /><p-columnFilter type="text" field="category" display="menu" /></div>
+          </th>
+          <th pSortableColumn="price">
+            <div class="col-header">Price <p-sortIcon field="price" /><p-columnFilter type="numeric" field="price" display="menu" /></div>
+          </th>
+          <th pSortableColumn="stock">
+            <div class="col-header">Stock <p-sortIcon field="stock" /><p-columnFilter type="numeric" field="stock" display="menu" /></div>
+          </th>
+          <th pSortableColumn="rating">
+            <div class="col-header">Rating <p-sortIcon field="rating" /></div>
+          </th>
+          <th style="width:110px">Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
+        <tr>
+          <td>
+            <img [src]="product.thumbnail" [alt]="product.title" class="thumb" />
+          </td>
+          <td class="product-name">{{ product.title }}</td>
+          <td><p-tag [value]="product.category" severity="secondary" /></td>
+          <td>${{ product.price | number:'1.2-2' }}</td>
+          <td>
+            <p-tag [value]="product.stock.toString()" [severity]="stockSeverity(product.stock)" />
+          </td>
+          <td>
+            <span class="rating">
+              <i class="pi pi-star-fill" style="color:#f59e0b;font-size:0.75rem"></i>
+              {{ product.rating | number:'1.1-1' }}
+            </span>
+          </td>
+          <td>
+            <div class="actions">
+              <p-button
+                icon="pi pi-pencil"
+                severity="secondary"
+                [text]="true"
+                size="small"
+                pTooltip="Edit"
+                (onClick)="openEdit(product)"
+              />
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                [text]="true"
+                size="small"
+                pTooltip="Delete"
+                (onClick)="confirmDelete(product, rowIndex)"
+              />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr><td colspan="7" class="empty-state">No products found</td></tr>
+      </ng-template>
+
+      <ng-template pTemplate="loadingbody">
+        @for (row of [1,2,3,4,5,6,7,8,9,10]; track row) {
+          <tr>
+            @for (col of [1,2,3,4,5,6,7]; track col) {
+              <td><div class="skeleton"></div></td>
+            }
+          </tr>
+        }
+      </ng-template>
+    </p-table>
+
+  </div>
+</div>

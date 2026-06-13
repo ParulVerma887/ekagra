@@ -1,0 +1,77 @@
+<div class="login-wrapper">
+  <div class="login-card">
+
+    <div class="login-header">
+      <h1>Platform Commons</h1>
+      <p>Sign in to your account</p>
+    </div>
+
+    <!-- Loading skeleton -->
+    @if (loading()) {
+      <div class="skeleton-form">
+        <div class="skeleton skeleton-label"></div>
+        <div class="skeleton skeleton-input"></div>
+        <div class="skeleton skeleton-label"></div>
+        <div class="skeleton skeleton-input"></div>
+        <div class="skeleton skeleton-btn"></div>
+      </div>
+    }
+
+    <!-- Actual form -->
+    @if (!loading()) {
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+
+        @if (errorMsg()) {
+          <div class="error-banner">{{ errorMsg() }}</div>
+        }
+
+        <div class="field">
+          <label for="username">Username</label>
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            placeholder="Enter your username"
+            [class.invalid]="username.invalid && username.touched"
+            autocomplete="username"
+          />
+          @if (username.touched && username.hasError('required')) {
+            <span class="field-error">Username is required</span>
+          }
+          @if (username.touched && username.hasError('minlength')) {
+            <span class="field-error">Minimum 3 characters</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            placeholder="Enter your password"
+            [class.invalid]="password.invalid && password.touched"
+            autocomplete="current-password"
+          />
+          @if (password.touched && password.hasError('required')) {
+            <span class="field-error">Password is required</span>
+          }
+          @if (password.touched && password.hasError('minlength')) {
+            <span class="field-error">Minimum 6 characters</span>
+          }
+        </div>
+
+        <button type="submit" class="btn-primary" [disabled]="loading()">
+          Sign In
+        </button>
+
+      </form>
+    }
+
+    <div class="login-hint">
+      <p>Demo — Admin: <strong>emilys / emilyspass</strong></p>
+      <p>Demo — User: <strong>sophiab / sophiabpass</strong></p>
+    </div>
+
+  </div>
+</div>

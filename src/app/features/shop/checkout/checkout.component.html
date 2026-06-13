@@ -1,0 +1,206 @@
+<div class="checkout-page">
+
+  <!-- Stepper -->
+  <div class="stepper">
+    @for (s of [1,2,3]; track s) {
+      <div class="step" [class.active]="step() === s" [class.done]="step() > s">
+        <div class="step-circle">
+          @if (step() > s) { <i class="pi pi-check"></i> }
+          @else { {{ s }} }
+        </div>
+        <span class="step-label">{{ s === 1 ? 'Shipping' : s === 2 ? 'Payment' : 'Review' }}</span>
+      </div>
+      @if (s < 3) { <div class="step-line" [class.done]="step() > s"></div> }
+    }
+  </div>
+
+  <div class="checkout-layout">
+
+    <!-- Left: Form area -->
+    <div class="form-col">
+
+      <!-- Step 1: Shipping -->
+      @if (step() === 1) {
+        <div class="form-card">
+          <h2>Shipping Info</h2>
+          <form [formGroup]="shippingForm" novalidate>
+
+            <div class="field-row">
+              <div class="field">
+                <label>Full Name *</label>
+                <input formControlName="fullName" placeholder="John Smith" />
+                @if (ctrl(shippingForm,'fullName').touched && ctrl(shippingForm,'fullName').invalid) {
+                  <small class="err">Full name required (min 3 chars)</small>
+                }
+              </div>
+              <div class="field">
+                <label>Email *</label>
+                <input formControlName="email" type="email" placeholder="john@example.com" />
+                @if (ctrl(shippingForm,'email').touched && ctrl(shippingForm,'email').invalid) {
+                  <small class="err">Valid email required</small>
+                }
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label>Phone *</label>
+                <input formControlName="phone" placeholder="10-digit number" />
+                @if (ctrl(shippingForm,'phone').touched && ctrl(shippingForm,'phone').invalid) {
+                  <small class="err">10-digit phone required</small>
+                }
+              </div>
+              <div class="field">
+                <label>ZIP Code *</label>
+                <input formControlName="zip" placeholder="110001" />
+                @if (ctrl(shippingForm,'zip').touched && ctrl(shippingForm,'zip').invalid) {
+                  <small class="err">Valid ZIP required</small>
+                }
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Street Address *</label>
+              <input formControlName="address" placeholder="123 Main Street" />
+              @if (ctrl(shippingForm,'address').touched && ctrl(shippingForm,'address').invalid) {
+                <small class="err">Address required</small>
+              }
+            </div>
+
+            <div class="field">
+              <label>City *</label>
+              <input formControlName="city" placeholder="Mumbai" />
+              @if (ctrl(shippingForm,'city').touched && ctrl(shippingForm,'city').invalid) {
+                <small class="err">City required</small>
+              }
+            </div>
+
+          </form>
+        </div>
+      }
+
+      <!-- Step 2: Payment (dynamic JSON form) -->
+      @if (step() === 2) {
+        <div class="form-card">
+          <h2>Payment Details</h2>
+          <p class="hint"><i class="pi pi-lock"></i> Test card: <strong>4532015112830366</strong></p>
+          <form [formGroup]="paymentForm" novalidate>
+            @for (field of formFields(); track field.name) {
+              @if (isVisible(field)) {
+                <div class="field">
+                  <label>{{ field.label }}
+                    @if (field.validators.includes('required')) { <span class="req">*</span> }
+                  </label>
+
+                  @if (field.type === 'checkbox') {
+                    <label class="checkbox-label">
+                      <input type="checkbox" [formControlName]="field.name" />
+                      {{ field.label }}
+                    </label>
+                  } @else {
+                    <input
+                      [formControlName]="field.name"
+                      [type]="field.type"
+                      [placeholder]="field.placeholder || ''"
+                    />
+                  }
+
+                  @if (ctrl(paymentForm, field.name).touched && ctrl(paymentForm, field.name).errors) {
+                    @if (ctrl(paymentForm, field.name).errors?.['required']) {
+                      <small class="err">{{ field.label }} is required</small>
+                    } @else if (ctrl(paymentForm, field.name).errors?.['luhn']) {
+                      <small class="err">Invalid card number (Luhn check failed)</small>
+                    } @else if (ctrl(paymentForm, field.name).errors?.['pattern']) {
+                      <small class="err">Invalid format for {{ field.label }}</small>
+                    } @else if (ctrl(paymentForm, field.name).errors?.['minlength']) {
+                      <small class="err">Too short</small>
+                    }
+                  }
+                </div>
+              }
+            }
+          </form>
+        </div>
+      }
+
+      <!-- Step 3: Review -->
+      @if (step() === 3) {
+        <div class="form-card">
+          <h2>Review Order</h2>
+
+          <div class="review-section">
+            <p class="review-title">Shipping To</p>
+            <p class="review-val">{{ shippingForm.value.fullName }}</p>
+            <p class="review-val">{{ shippingForm.value.address }}, {{ shippingForm.value.city }} {{ shippingForm.value.zip }}</p>
+            <p class="review-val">{{ shippingForm.value.phone }} · {{ shippingForm.value.email }}</p>
+          </div>
+
+          <div class="review-section">
+            <p class="review-title">Payment</p>
+            <p class="review-val">
+              {{ paymentForm.value.cardName }} ·
+              **** **** **** {{ lastFour(paymentForm.value.cardNumber) }}
+            </p>
+            <p class="review-val">Expires {{ paymentForm.value.expiry }}</p>
+          </div>
+
+          <div class="review-section">
+            <p class="review-title">Items ({{ items().length }})</p>
+            @for (item of items(); track item.product.id) {
+              <div class="review-item">
+                <span>{{ item.product.title }} ×{{ item.quantity }}</span>
+                <span>${{ item.product.price * item.quantity | number:'1.2-2' }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Navigation buttons -->
+      <div class="nav-btns">
+        @if (step() > 1) {
+          <button class="btn-secondary" (click)="prevStep()">
+            <i class="pi pi-arrow-left"></i> Back
+          </button>
+        } @else {
+          <a routerLink="/shop/cart" class="btn-secondary">
+            <i class="pi pi-arrow-left"></i> Back to Cart
+          </a>
+        }
+
+        @if (step() < 3) {
+          <button class="btn-primary" (click)="nextStep()">
+            Continue <i class="pi pi-arrow-right"></i>
+          </button>
+        } @else {
+          <button class="btn-primary place-order" [disabled]="submitting()" (click)="placeOrder()">
+            @if (submitting()) { <i class="pi pi-spin pi-spinner"></i> Placing Order... }
+            @else { <i class="pi pi-check"></i> Place Order }
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Right: Order summary sidebar -->
+    <div class="summary-col">
+      <div class="summary-card">
+        <h3>Order Summary</h3>
+        @for (item of items(); track item.product.id) {
+          <div class="s-row">
+            <div class="s-item">
+              <img [src]="item.product.thumbnail" [alt]="item.product.title" />
+              <span>{{ item.product.title | slice:0:20 }}{{ item.product.title.length > 20 ? '...' : '' }}</span>
+            </div>
+            <span>${{ item.product.price * item.quantity | number:'1.2-2' }}</span>
+          </div>
+        }
+        <div class="s-divider"></div>
+        <div class="s-total">
+          <span>Total</span>
+          <span>${{ total() | number:'1.2-2' }}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,254 @@
+.page {
+  padding: 1.5rem 2rem;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+  }
+}
+
+.table-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fafafa;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+// Custom search box
+.search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .search-icon {
+    position: absolute;
+    left: 0.75rem;
+    color: #9ca3af;
+    font-size: 0.85rem;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .search-input {
+    padding-left: 2.2rem !important;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    height: 36px;
+    font-size: 0.875rem;
+    width: 210px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    color: #374151;
+    background: #fff;
+
+    &::placeholder { color: #9ca3af; }
+
+    &:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+    }
+  }
+}
+
+.col-header {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.thumb {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.product-name {
+  font-weight: 500;
+  color: #111827;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+.actions {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.empty-state {
+  text-align: center;
+  color: #9ca3af;
+  padding: 2rem;
+}
+
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+
+.skeleton {
+  height: 18px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 1200px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+// ---- PrimeNG overrides ----
+::ng-deep {
+
+  // Add Product button
+  .add-btn.p-button {
+    background: #6366f1 !important;
+    border-color: #6366f1 !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 0.875rem !important;
+    padding: 0.55rem 1.1rem !important;
+    gap: 0.4rem;
+    box-shadow: 0 2px 6px rgba(99,102,241,0.3);
+    transition: background 0.2s, box-shadow 0.2s !important;
+
+    &:hover {
+      background: #4f46e5 !important;
+      border-color: #4f46e5 !important;
+      box-shadow: 0 4px 10px rgba(99,102,241,0.35) !important;
+    }
+  }
+
+  // Clear filters button
+  .clear-btn.p-button {
+    border-radius: 8px !important;
+    font-size: 0.8rem !important;
+    padding: 0.4rem 0.85rem !important;
+    height: 36px;
+  }
+
+  // Category dropdown
+  .cat-dropdown.p-dropdown {
+    border: 1.5px solid #d1d5db !important;
+    border-radius: 8px !important;
+    height: 36px;
+    min-width: 165px;
+    align-items: center;
+
+    .p-dropdown-label {
+      font-size: 0.875rem !important;
+      padding: 0 0.75rem !important;
+    }
+
+    &.p-focus {
+      border-color: #6366f1 !important;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.12) !important;
+    }
+  }
+
+  // Category tag — pill badge style
+  .p-tag {
+    border-radius: 20px !important;
+    font-size: 0.72rem !important;
+    padding: 0.22rem 0.65rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.01em;
+  }
+
+  .p-tag-secondary {
+    background: #e0e7ff !important;
+    color: #4338ca !important;
+  }
+
+  .p-tag-success {
+    background: #dcfce7 !important;
+    color: #15803d !important;
+  }
+
+  .p-tag-warning {
+    background: #fef3c7 !important;
+    color: #b45309 !important;
+  }
+
+  .p-tag-danger {
+    background: #fee2e2 !important;
+    color: #dc2626 !important;
+  }
+
+  // Action buttons
+  .actions .p-button.p-button-text {
+    width: 2rem !important;
+    height: 2rem !important;
+    border-radius: 6px !important;
+    padding: 0 !important;
+
+    &:hover { background: rgba(0,0,0,0.06) !important; }
+
+    .p-button-icon { font-size: 0.85rem; }
+  }
+
+  // Table header
+  .p-datatable .p-datatable-thead > tr > th {
+    background: #f8fafc !important;
+    color: #374151 !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.7rem 0.85rem !important;
+    border-color: #e5e7eb !important;
+  }
+
+  .p-datatable .p-datatable-tbody > tr > td {
+    padding: 0.65rem 0.85rem !important;
+    font-size: 0.875rem !important;
+    border-color: #e5e7eb !important;
+    vertical-align: middle;
+  }
+
+  .p-datatable .p-datatable-tbody > tr:hover {
+    background: #f0f4ff !important;
+  }
+
+  // Paginator
+  .p-paginator {
+    background: #f8fafc !important;
+    border-top: 1px solid #e5e7eb !important;
+    padding: 0.5rem 1rem !important;
+  }
+}

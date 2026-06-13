@@ -1,0 +1,32 @@
+<div class="confirm-page">
+  <div class="confirm-card">
+
+    <div class="success-icon">
+      <i class="pi pi-check-circle"></i>
+    </div>
+
+    <h1>Order Placed!</h1>
+    <p class="sub">Thanks for your order. We'll send a confirmation email shortly.</p>
+
+    <div class="order-badge">
+      Order #<strong>{{ orderId() }}</strong>
+    </div>
+
+    <div class="delivery-info">
+      <i class="pi pi-truck"></i>
+      <div>
+        <p class="delivery-label">Estimated Delivery</p>
+        <p class="delivery-date">{{ estimatedDelivery() }}</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a routerLink="/shop/catalogue" class="btn-primary">
+        <i class="pi pi-shopping-bag"></i> Continue Shopping
+      </a>
+      <a routerLink="/admin/orders" class="btn-secondary">
+        View All Orders
+      </a>
+    </div>
+  </div>
+</div>

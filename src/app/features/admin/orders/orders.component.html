@@ -1,0 +1,145 @@
+<div class="page">
+  <p-toast />
+
+  <div class="page-header">
+    <div>
+      <h2>Orders</h2>
+      <span class="subtitle">{{ filtered.length }} orders</span>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <i class="pi pi-search search-icon"></i>
+      <input
+        [(ngModel)]="search"
+        (ngModelChange)="filter()"
+        placeholder="Search by name or order ID..."
+        class="search-input"
+      />
+    </div>
+    <div class="toolbar-right">
+      <p-dropdown
+        [options]="statusOptions"
+        [(ngModel)]="statusFilter"
+        (ngModelChange)="filter()"
+        optionLabel="label"
+        optionValue="value"
+      />
+    </div>
+  </div>
+
+  <div class="table-card">
+    <p-table
+      [value]="filtered"
+      [loading]="loading"
+      [rows]="10"
+      [paginator]="true"
+      [rowHover]="true"
+      styleClass="p-datatable-sm"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>#Order</th>
+          <th>Customer</th>
+          <th>Items</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Detail</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-order>
+        <tr>
+          <td>#{{ order.id }}</td>
+          <td>
+            <div class="customer-cell">
+              <span class="customer-name">{{ order.name }}</span>
+              <span class="customer-email">{{ order.email }}</span>
+            </div>
+          </td>
+          <td>{{ order.items }}</td>
+          <td>${{ order.total | number:'1.2-2' }}</td>
+          <td>
+            <p-dropdown
+              [options]="statusUpdateOptions"
+              [ngModel]="order.status"
+              (ngModelChange)="changeStatus(order, $event)"
+              optionLabel="label"
+              optionValue="value"
+              [style]="{'width':'130px'}"
+            />
+          </td>
+          <td>{{ order.date }}</td>
+          <td>
+            <p-button
+              icon="pi pi-eye"
+              severity="secondary"
+              [text]="true"
+              size="small"
+              (onClick)="selected = order"
+            />
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="empty-msg">
+            <i class="pi pi-inbox"></i>
+            <span>No orders found</span>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  @if (selected) {
+    <div class="side-panel">
+      <div class="panel-header">
+        <div>
+          <h3>Order #{{ selected.id }}</h3>
+          <span class="panel-date">{{ selected.date }}</span>
+        </div>
+        <button class="close-btn" (click)="selected = null">
+          <i class="pi pi-times"></i>
+        </button>
+      </div>
+
+      <div class="panel-section">
+        <p class="section-title">Customer</p>
+        <p class="cust-name">{{ selected.name }}</p>
+        <p class="cust-email">{{ selected.email }}</p>
+      </div>
+
+      <div class="panel-section">
+        <p class="section-title">Status</p>
+        <p-tag [value]="selected.status | titlecase" [severity]="badgeType(selected.status)" />
+      </div>
+
+      <div class="panel-section items-section">
+        <p class="section-title">Items ({{ selected.items }} units)</p>
+        <div class="items-list">
+          @for (p of selected.products; track p.id) {
+            <div class="item-row">
+              <img [src]="p.thumbnail" [alt]="p.title" class="item-img" />
+              <div class="item-info">
+                <p class="item-title">{{ p.title }}</p>
+                <p class="item-meta">x{{ p.quantity }} · ${{ p.price | number:'1.2-2' }}</p>
+              </div>
+              <span class="item-total">${{ p.total | number:'1.2-2' }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="panel-section totals-section">
+        <div class="total-row">
+          <span>Total</span>
+          <span>${{ selected.total | number:'1.2-2' }}</span>
+        </div>
+      </div>
+    </div>
+  }
+</div>

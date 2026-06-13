@@ -1,0 +1,120 @@
+<div class="catalogue">
+
+  <!-- Page header -->
+  <div class="catalogue-header">
+    <div class="header-top">
+      <h1>Shop</h1>
+      <div class="search-wrap">
+        <i class="pi pi-search search-icon"></i>
+        <input
+          [formControl]="searchCtrl"
+          placeholder="Search products..."
+          class="search-input"
+        />
+      </div>
+    </div>
+
+    <!-- Category chips -->
+    <div class="category-chips">
+      <button
+        class="chip"
+        [class.active]="activeCategory() === 'all'"
+        (click)="selectCategory('all')"
+      >All</button>
+      @for (cat of categories(); track cat.slug) {
+        <button
+          class="chip"
+          [class.active]="activeCategory() === cat.slug"
+          (click)="selectCategory(cat.slug)"
+        >{{ cat.name }}</button>
+      }
+    </div>
+  </div>
+
+  <!-- Results info -->
+  @if (!loading()) {
+    <p class="results-info">
+      {{ total() }} products
+      @if (activeCategory() !== 'all') { <span>in <strong>{{ activeCategory() }}</strong></span> }
+      @if (searchCtrl.value) { <span>for "<strong>{{ searchCtrl.value }}</strong>"</span> }
+    </p>
+  }
+
+  <!-- Skeleton grid -->
+  @if (loading()) {
+    <div class="product-grid">
+      @for (s of skeletons; track $index) {
+        <div class="product-card skeleton-card">
+          <div class="sk-img"></div>
+          <div class="sk-body">
+            <div class="sk-line w60"></div>
+            <div class="sk-line w40"></div>
+            <div class="sk-line w80"></div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Product grid -->
+  @if (!loading()) {
+    <div class="product-grid">
+      @for (product of products(); track product.id) {
+        <a [routerLink]="['/shop/products', product.id]" class="product-card">
+          <div class="card-img-wrap">
+            <img [src]="product.thumbnail" [alt]="product.title" class="card-img" />
+            @if (product.discountPercentage && product.discountPercentage > 5) {
+              <span class="discount-badge">-{{ product.discountPercentage | number:'1.0-0' }}%</span>
+            }
+          </div>
+          <div class="card-body">
+            <p class="card-category">{{ product.category }}</p>
+            <h3 class="card-title">{{ product.title }}</h3>
+            <div class="card-meta">
+              <div class="rating">
+                <i class="pi pi-star-fill"></i>
+                <span>{{ product.rating | number:'1.1-1' }}</span>
+              </div>
+              <span class="stock-label" [class.low]="product.stock < 10">
+                {{ product.stock === 0 ? 'Out of stock' : product.stock < 10 ? 'Low stock' : 'In stock' }}
+              </span>
+            </div>
+            <div class="card-footer">
+              <span class="price">${{ product.price | number:'1.2-2' }}</span>
+              <button
+                class="add-btn"
+                [disabled]="product.stock === 0"
+                (click)="addToCart($event, product)"
+              >
+                <i class="pi pi-cart-plus"></i>
+              </button>
+            </div>
+          </div>
+        </a>
+      }
+    </div>
+
+    <!-- Empty state -->
+    @if (products().length === 0) {
+      <div class="empty-state">
+        <i class="pi pi-search"></i>
+        <p>No products found</p>
+        <button class="chip active" (click)="selectCategory('all')">Clear filters</button>
+      </div>
+    }
+
+    <!-- Pagination -->
+    @if (total() > pageSize) {
+      <div class="pagination">
+        <button class="page-btn" [disabled]="!hasPrev" (click)="prevPage()">
+          <i class="pi pi-chevron-left"></i> Prev
+        </button>
+        <span class="page-info">Page {{ currentPage() + 1 }} of {{ totalPages }}</span>
+        <button class="page-btn" [disabled]="!hasNext" (click)="nextPage()">
+          Next <i class="pi pi-chevron-right"></i>
+        </button>
+      </div>
+    }
+  }
+
+</div>

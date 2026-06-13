@@ -1,0 +1,43 @@
+<div class="admin-shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-name">Platform Commons</span>
+    </div>
+
+    <nav class="nav">
+      <a routerLink="/admin/products" routerLinkActive="active" class="nav-item">
+        <i class="pi pi-box"></i> Products
+      </a>
+      <a routerLink="/admin/orders" routerLinkActive="active" class="nav-item">
+        <i class="pi pi-shopping-cart"></i> Orders
+      </a>
+      <a routerLink="/admin/analytics" routerLinkActive="active" class="nav-item">
+        <i class="pi pi-chart-bar"></i> Analytics
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <p-avatar
+        [label]="user()?.firstName?.charAt(0) ?? 'A'"
+        shape="circle"
+        size="normal"
+        styleClass="avatar"
+      />
+      <div class="user-info">
+        <span class="user-name">{{ user()?.firstName }} {{ user()?.lastName }}</span>
+        <span class="user-role">Admin</span>
+      </div>
+      <button class="logout-btn" (click)="logout()" title="Logout">
+        <i class="pi pi-sign-out"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <router-outlet />
+  </main>
+
+</div>

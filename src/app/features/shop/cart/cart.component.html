@@ -1,0 +1,99 @@
+<div class="cart-page">
+
+  <div class="cart-header">
+    <h1>Your Cart</h1>
+    <span class="count">{{ count() }} item{{ count() !== 1 ? 's' : '' }}</span>
+  </div>
+
+  @if (items().length === 0) {
+    <div class="empty-cart">
+      <i class="pi pi-shopping-cart"></i>
+      <h3>Your cart is empty</h3>
+      <p>Add some products to get started</p>
+      <a routerLink="/shop/catalogue" class="btn-primary">Browse Shop</a>
+    </div>
+  }
+
+  @if (items().length > 0) {
+    <div class="cart-layout">
+
+      <!-- Items list -->
+      <div class="items-col">
+        <div class="items-card">
+          <div class="items-header">
+            <span>Product</span>
+            <span>Qty</span>
+            <span>Total</span>
+          </div>
+
+          @for (item of items(); track item.product.id) {
+            <div class="item-row">
+              <img [src]="item.product.thumbnail" [alt]="item.product.title" class="item-img" />
+              <div class="item-info">
+                <a [routerLink]="['/shop/products', item.product.id]" class="item-name">
+                  {{ item.product.title }}
+                </a>
+                <span class="item-price">${{ item.product.price | number:'1.2-2' }} each</span>
+              </div>
+              <div class="qty-control">
+                <button (click)="updateQty(item.product.id, item.quantity - 1)" [disabled]="item.quantity <= 1">−</button>
+                <span>{{ item.quantity }}</span>
+                <button (click)="updateQty(item.product.id, item.quantity + 1)" [disabled]="item.quantity >= item.product.stock">+</button>
+              </div>
+              <span class="item-total">${{ item.product.price * item.quantity | number:'1.2-2' }}</span>
+              <button class="remove-btn" (click)="remove(item.product.id)" title="Remove">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          }
+
+          <div class="items-footer">
+            <button class="clear-btn" (click)="clear()">
+              <i class="pi pi-trash"></i> Clear Cart
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="summary-col">
+        <div class="summary-card">
+          <h3>Order Summary</h3>
+
+          @for (item of items(); track item.product.id) {
+            <div class="summary-row">
+              <span>{{ item.product.title | slice:0:22 }}{{ item.product.title.length > 22 ? '...' : '' }} ×{{ item.quantity }}</span>
+              <span>${{ item.product.price * item.quantity | number:'1.2-2' }}</span>
+            </div>
+          }
+
+          <div class="divider"></div>
+
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span>${{ summary().subtotal | number:'1.2-2' }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Tax (10%)</span>
+            <span>${{ summary().tax | number:'1.2-2' }}</span>
+          </div>
+          <div class="divider"></div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span>${{ summary().total | number:'1.2-2' }}</span>
+          </div>
+
+          <a routerLink="/shop/checkout/step/1" class="checkout-btn">
+            Proceed to Checkout <i class="pi pi-arrow-right"></i>
+          </a>
+
+          <a routerLink="/shop/catalogue" class="continue-link">
+            ← Continue Shopping
+          </a>
+        </div>
+      </div>
+
+    </div>
+  }
+
+</div>

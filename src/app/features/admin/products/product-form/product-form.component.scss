@@ -1,0 +1,157 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+
+  label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #374151;
+    letter-spacing: 0.01em;
+  }
+
+  .w-full { width: 100%; }
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.err {
+  color: #ef4444;
+  font-size: 0.76rem;
+  margin-top: 0.1rem;
+}
+
+::ng-deep {
+
+  // Dialog styles
+  .p-dialog {
+    border-radius: 14px !important;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18) !important;
+  }
+
+  .p-dialog .p-dialog-header {
+    background: #1a1a2e !important;
+    color: #fff !important;
+    padding: 1.1rem 1.4rem !important;
+    border-bottom: none !important;
+
+    .p-dialog-title {
+      font-size: 1rem !important;
+      font-weight: 700 !important;
+    }
+
+    .p-dialog-header-icon {
+      color: rgba(255,255,255,0.6) !important;
+
+      &:hover { color: #fff !important; background: rgba(255,255,255,0.1) !important; }
+    }
+  }
+
+  .p-dialog .p-dialog-content {
+    padding: 1.4rem !important;
+    background: #fff !important;
+  }
+
+  .p-dialog .p-dialog-footer {
+    padding: 1rem 1.4rem !important;
+    background: #f8fafc !important;
+    border-top: 1px solid #e5e7eb !important;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+  }
+
+  // Form inputs inside modal
+  .p-dialog input.p-inputtext {
+    width: 100%;
+    border: 1.5px solid #d1d5db !important;
+    border-radius: 8px !important;
+    padding: 0.55rem 0.85rem !important;
+    font-size: 0.875rem !important;
+    color: #111827 !important;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:focus {
+      border-color: #6366f1 !important;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.12) !important;
+    }
+  }
+
+  // Textarea inside modal
+  .p-dialog textarea.p-inputtextarea {
+    width: 100%;
+    border: 1.5px solid #d1d5db !important;
+    border-radius: 8px !important;
+    padding: 0.55rem 0.85rem !important;
+    font-size: 0.875rem !important;
+    color: #111827 !important;
+    resize: vertical;
+    font-family: inherit;
+
+    &:focus {
+      border-color: #6366f1 !important;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.12) !important;
+    }
+  }
+
+  // InputNumber inside modal
+  .p-dialog .p-inputnumber {
+    width: 100%;
+
+    .p-inputtext {
+      width: 100%;
+      border: 1.5px solid #d1d5db !important;
+      border-radius: 8px !important;
+      padding: 0.55rem 0.85rem !important;
+      font-size: 0.875rem !important;
+    }
+  }
+
+  // Dropdown inside modal
+  .p-dialog .p-dropdown {
+    width: 100%;
+    border: 1.5px solid #d1d5db !important;
+    border-radius: 8px !important;
+
+    .p-dropdown-label {
+      padding: 0.55rem 0.85rem !important;
+      font-size: 0.875rem !important;
+    }
+
+    &.p-focus {
+      border-color: #6366f1 !important;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.12) !important;
+    }
+  }
+
+  // Save button
+  .p-dialog-footer .p-button:last-child {
+    background: #6366f1 !important;
+    border-color: #6366f1 !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+
+    &:hover {
+      background: #4f46e5 !important;
+      border-color: #4f46e5 !important;
+    }
+  }
+
+  // Cancel button
+  .p-dialog-footer .p-button:first-child {
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    color: #374151 !important;
+    border-color: #d1d5db !important;
+
+    &:hover {
+      background: #f3f4f6 !important;
+    }
+  }
+}
